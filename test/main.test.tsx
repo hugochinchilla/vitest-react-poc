@@ -1,8 +1,8 @@
 import React from 'react'
 import {describe, expect, it} from "vitest";
-import {act, getByRole, render, screen} from "@testing-library/react";
+import {act, getByRole, render, renderHook, screen, waitFor} from "@testing-library/react";
 import matchers from '@testing-library/jest-dom'
-import {SortableAnswer} from "../src/SortableAnswer";
+import {SortableAnswer, useSortableAnswers} from "../src/SortableAnswer";
 
 expect.extend(matchers)
 
@@ -109,8 +109,8 @@ describe('A question with sortable answers', async () => {
             expect(answers[1]).toHaveTextContent(theFirstOption)
         })
         it("trying to move up the first answer does nothing", async () => {
-            const theFirstOption = "a"
-            const theSecondOption = "b"
+            const theFirstOption = "first"
+            const theSecondOption = "second"
             render(<SortableAnswer
                 question={""}
                 options={[theFirstOption, theSecondOption]}
@@ -124,5 +124,16 @@ describe('A question with sortable answers', async () => {
             expect(answers[0]).toHaveTextContent(theFirstOption)
             expect(answers[1]).toHaveTextContent(theSecondOption)
         })
+    })
+})
+
+describe("useSortableAnswers hook", () => {
+    it('xxx', async () => {
+        const {result} = renderHook(() =>
+            useSortableAnswers(['a', 'b', 'c']))
+
+        act(() => result.current.moveUp(0));
+
+        expect(result.current.answers).toEqual(['a', 'b', 'c'])
     })
 })
